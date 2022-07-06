@@ -26,6 +26,9 @@ class Author(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
+    def __str__(self):
+        return self.name.title()
+
 
 class Post(models.Model):
     article = 'AR'
@@ -54,6 +57,9 @@ class Post(models.Model):
 
     def preview(self):
         return f'{self.content[:124]}...'
+
+    def __str__(self):
+        return f'{self.headline}: {self.content[:40]}'
 
 
 class PostCategory(models.Model):

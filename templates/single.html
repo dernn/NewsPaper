@@ -1,0 +1,28 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+Piece of news
+{% endblock title %}
+
+{% block content %}
+<style type="text/css">
+    .space {
+        text-align: left;
+        margin: auto;
+        width: 50%;
+        padding: 10px;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+</style>
+<div class="space">
+    <h2>{{ single.headline|censor }}</h2>
+</div>
+<div class="space">
+    {{ single.pub_date|date:'d F, Y' }}<br>
+    {{ single.content|censor }}
+</div>
+{% endblock content %}

@@ -1,0 +1,32 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+News
+{% endblock title %}
+
+{% block content %}
+<h1 style="text-align:left; padding:12px;">All news ({{news|length}})</h1>
+<style type="text/css">
+    .space {
+        text-align: left;
+        width: 50%;
+        padding: 12px;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+</style>
+{% if news %}
+    {% for single in news %}
+        <div class="space">
+            <h6>{{ single.headline|censor }}</h6>
+            {{ single.pub_date|date:'d F, Y' }}<br>
+            {{ single.content|truncatewords:20|censor }}
+        </div>
+    {% endfor %}
+{% else %}
+    <h4>Why is there no news here?</h4>
+{% endif %}
+{% endblock content %}
