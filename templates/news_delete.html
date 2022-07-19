@@ -1,0 +1,27 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+Deleting
+{% endblock title %}
+
+{% block content %}
+    <div class="space-10">
+        <h2>Are you sure you want to delete this post?</h2>
+    </div>
+    <div class="space-10">
+        <h6>{{ single.headline|censor }}</h6>
+        {{ single.pub_date|date:'d F, Y' }}<br>
+        {{ single.content|truncatechars:160|censor }}
+    </div>
+    <div class="space-10">
+        <type style="text-align:center;">
+            <form method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Confirm">
+                <a href="{% url 'single_detail' single.id %}"><input type="button" value="back"></a>
+            </form>
+        </type>
+    </div>
+{% endblock content %}

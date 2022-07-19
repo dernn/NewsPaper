@@ -7,26 +7,47 @@ News
 {% endblock title %}
 
 {% block content %}
-<h1 style="text-align:left; padding:12px;">All news ({{news|length}})</h1>
-<style type="text/css">
-    .space {
-        text-align: left;
-        width: 50%;
-        padding: 12px;
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-    }
-</style>
-{% if news %}
-    {% for single in news %}
-        <div class="space">
-            <h6>{{ single.headline|censor }}</h6>
-            {{ single.pub_date|date:'d F, Y' }}<br>
-            {{ single.content|truncatewords:20|censor }}
+    <h1 class="space-h">All news ({{ paginator.count }})</h1>
+    <!-- condition for SearchListView-->
+    {% if filter %}
+        <div class="space-h">
+            <form method="GET">
+               {{ filter.form }}
+               <input type="submit" value="Search">
+            </form>
+            <br>
         </div>
-    {% endfor %}
-{% else %}
-    <h4>Why is there no news here?</h4>
-{% endif %}
+    {% endif %}
+
+    {% if news %}
+        {% for single in news %}
+            <div class="space-12">
+                <a href="{% url 'single_detail' single.id %}"><h6>{{ single.headline|censor }}</h6></a>
+                {{ single.pub_date|date:'d F, Y' }}<br>
+                {{ single.content|truncatewords:20|censor }}<br>
+                <a href="{% url 'news_update' single.id %}">Edit</a>
+                <a href="{% url 'news_delete' single.id %}">Delete</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h4>Why is there no news here?</h4>
+    {% endif %}
+
+    {% if is_paginated %}
+        {% if page_obj.has_previous and page_obj.number > 2 %}
+            <a href="?page=1&{{ params }}"><<<</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a>{{ num }}</a>
+            {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}&{{ params }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next and page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
+            <a href="?page={{ page_obj.paginator.num_pages }}&{{ params }}">>>></a>
+        {% endif %}
+    {% endif %}
 {% endblock content %}

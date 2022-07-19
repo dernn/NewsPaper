@@ -1,0 +1,35 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+    {% if post %}
+        Editing
+    {% else %}
+        Creating
+    {% endif %}
+{% endblock title %}
+
+{% block content %}
+    <div class="space-10">
+        {% if post %}
+            <h4>Edit</h4>
+        {% else %}
+            <h4>Create new</h4>
+        {% endif %}
+    </div>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="space-10">
+            {% for field in form %}
+                {{ field.label_tag }}<br>
+                {{ field }}<br>
+            {% endfor %}
+        </div>
+        <div class="space-10">
+            {% if post %}
+                <input type="submit" value="Update">
+            {% else %}
+                <input type="submit" value="Post">
+            {% endif %}
+        </div>
+    </form>
+{% endblock content %}
