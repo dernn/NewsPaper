@@ -7,11 +7,18 @@ class Author(models.Model):
     rating = models.IntegerField(default=0)
 
     def update_rating(self):
+        # рейтинг постов автора умножаем на 3
         post_rate = int(self.post_set.all().aggregate(rate=models.Sum('rating') * 3).get('rate') or 0)
+        # рейтинг всех комментариев автора просто суммируем
         comment_rate = int(self.user.comment_set.all().aggregate(rate=models.Sum('rating')).get('rate') or 0)
 
+        # рейтинг всех комментариев к статьям автора, исключая комментарии самого автора под своими постами
+        # (они уже учтены в comment_rate)
         feedback_users = sum([int(Comment.objects.filter(post=post).exclude(user=self.user).aggregate(
             rate=models.Sum('rating')).get('rate') or 0) for post in self.post_set.all()])
+
+        # ниже я оставил разложенный list comprehension, чтобы лучше самому понимать,
+        # что просиходит в feedback_users
 
         # feedback_users = 0
         # for post in self.post_set.all():
