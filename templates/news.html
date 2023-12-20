@@ -1,4 +1,5 @@
-{% extends 'flatpages/default.html' %}
+<!-- /news/, на которой выводится список всех новостей. -->
+{% extends 'flatpages/default.html' %}  <!-- дефолтный шаблон в качестве основы -->
 
 {% load custom_filters %}
 
@@ -21,8 +22,10 @@ News
 {% if news %}
     {% for single in news %}
         <div class="space">
+            <!-- В темплейте обрабатываем фильтром заголовок -->
             <h6>{{ single.headline|censor }}</h6>
             {{ single.pub_date|date:'d F, Y' }}<br>
+            <!-- И content -->
             {{ single.content|truncatewords:20|censor }}
         </div>
     {% endfor %}

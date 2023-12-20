@@ -1,3 +1,4 @@
+<!-- /news/<id новости>, отдельная страница для полной информации о статье -->
 {% extends 'flatpages/default.html' %}
 
 {% load custom_filters %}
@@ -19,6 +20,7 @@ Piece of news
     }
 </style>
 <div class="space">
+    <!-- В сингле также применяем фильтр 'censor' -->
     <h2>{{ single.headline|censor }}</h2>
 </div>
 <div class="space">

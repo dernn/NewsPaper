@@ -14,6 +14,7 @@ SWEAR_WORDS = {
 }
 
 
+# Фильтр censor + обработка исключений
 @register.filter()
 def censor(value):
     try:
