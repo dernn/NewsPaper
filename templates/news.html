@@ -34,6 +34,7 @@ News
     {% endif %}
 
     {% if is_paginated %}
+        <!-- а здесь переходы на первую -->
         {% if page_obj.has_previous and page_obj.number > 2 %}
             <a href="?page=1&{{ params }}"><<<</a>
         {% endif %}
@@ -46,6 +47,7 @@ News
             {% endif %}
         {% endfor %}
 
+        <!-- и на последнюю страницу соответсвенно -->
         {% if page_obj.has_next and page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
             <a href="?page={{ page_obj.paginator.num_pages }}&{{ params }}">>>></a>
         {% endif %}

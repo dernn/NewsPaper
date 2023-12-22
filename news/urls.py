@@ -4,6 +4,7 @@ from .views import PostsListView, PostsDetailView, SearchListView, ProductCreate
 urlpatterns = [
     path('', PostsListView.as_view()),
     path('<int:pk>', PostsDetailView.as_view(), name='single_detail'),
+    # страничка фильтра /news/search
     path('search/', SearchListView.as_view(), name='news_search'),
     path('add/', ProductCreateView.as_view(), name='news_create'),
     path('<int:pk>/edit/', ProductUpdateView.as_view(), name='news_update'),

@@ -10,6 +10,8 @@ class PostsListView(ListView):
     ordering = '-pub_date'
     template_name = 'news.html'
     context_object_name = 'news'
+    # пагинацию на основной странице поставил на 5
+    # чтобы в разбивке получилось больше страниц
     paginate_by = 5
 
 
@@ -19,11 +21,13 @@ class PostsDetailView(DetailView):
     context_object_name = 'single'
 
 
+# отдельная вьюшка под поиск
 class SearchListView(ListView):
     model = Post
     ordering = '-pub_date'
     template_name = 'news.html'
     context_object_name = 'news'
+    # и в ней также немного пагинации
     paginate_by = 3
 
     def get_context_data(self, **kwargs):
