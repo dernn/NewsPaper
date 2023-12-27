@@ -10,7 +10,7 @@ class PostsListView(ListView):
     ordering = '-pub_date'
     template_name = 'news.html'
     context_object_name = 'news'
-    # пагинацию на основной странице поставил на 5
+    # пагинацию на основной странице поставил на 5 для наглядности,
     # чтобы в разбивке получилось больше страниц
     paginate_by = 5
 
@@ -44,12 +44,13 @@ class SearchListView(ListView):
         return PostFilter(self.request.GET, queryset=queryset).qs
 
 
-class ProductCreateView(CreateView):
+class PostCreateView(CreateView):
     template_name = 'news_create.html'
+    # здесь передаем в атрибут модельную форму для создания/редактирования
     form_class = PostForm
 
 
-class ProductUpdateView(UpdateView):
+class PostUpdateView(UpdateView):
     template_name = 'news_create.html'
     form_class = PostForm
 
@@ -58,7 +59,7 @@ class ProductUpdateView(UpdateView):
         return Post.objects.get(pk=id)
 
 
-class ProductDeleteView(DeleteView):
+class PostDeleteView(DeleteView):
     model = Post
     template_name = 'news_delete.html'
     context_object_name = 'single'
