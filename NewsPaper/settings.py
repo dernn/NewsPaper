@@ -43,6 +43,18 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'fpages',
     'django_filters',
+    # приложение для проверки аутентификации
+    'protect',
+    # первая реализация регистрации;
+    # редактирование профиля
+    'sign',
+
+    # приложения allauth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # ... регистрация посредством провайдера:
+    'allauth.socialaccount.providers.google',
 ]
 
 SITE_ID = 1
@@ -56,6 +68,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+
+    # настройки middleware для allauth
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'NewsPaper.urls'
@@ -75,6 +90,35 @@ TEMPLATES = [
         },
     },
 ]
+
+# URL-адрес аутентификации
+# LoginRequiredMixin перенаправит пользователя на эту страницу
+LOGIN_URL = '/accounts/login/'
+# редирект после успешного входа на сайт
+LOGIN_REDIRECT_URL = '/'
+
+# используется в случае, если данный проект управляет несколькими сайтами
+SITE_ID = 1
+
+# Бэкенды аутентификации [для allauth]
+AUTHENTICATION_BACKENDS = [
+    # встроенный бэкенд Django, реализующий аутентификацию по username
+    'django.contrib.auth.backends.ModelBackend',
+    # бэкенд аутентификации, предоставленный пакетом allauth:
+    # по email или сервис-провайдеру
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# настройки allauth для входа/регистрации по email
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+# username не требуется
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# подтверждение почты отключено
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+# замена стандартной формы регистрации кастомной
+ACCOUNT_FORMS = {'signup': 'sign.forms.BasicSignupForm'}
 
 WSGI_APPLICATION = 'NewsPaper.wsgi.application'
 

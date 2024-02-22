@@ -19,5 +19,11 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('pages/', include('django.contrib.flatpages.urls')),
-    path('news/', include('news.urls'))
+    path('news/', include('news.urls')),
+    # переадресуем корневую страницу на приложение 'protect'
+    path('', include('protect.urls')),
+    # и добавим ссылку на приложение регистрации
+    path('sign/', include('sign.urls')),
+    # подключаем также ссылки из приложения 'allauth'
+    path('accounts/', include('allauth.urls')),
 ]

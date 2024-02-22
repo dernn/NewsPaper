@@ -1,4 +1,6 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+# миксин для проверки наличия прав доступа
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from .models import Post
 from .filters import PostFilter
 from .forms import PostForm
@@ -44,13 +46,17 @@ class SearchListView(ListView):
         return PostFilter(self.request.GET, queryset=queryset).qs
 
 
-class PostCreateView(CreateView):
+class PostCreateView(PermissionRequiredMixin, CreateView):  # <-- PermissionRequiredMixin : проверка прав доступа
+    # соглашение для именования разрешений, [view-add-delete-change]:
+    # <app>.<action>_<model>
+    permission_required = ('news.add_post',)  # выдача разрешений
     template_name = 'news_create.html'
     # здесь передаем в атрибут модельную форму для создания/редактирования
     form_class = PostForm
 
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(PermissionRequiredMixin, UpdateView):  # <-- PermissionRequiredMixin : см. выше
+    permission_required = ('news.change_post',)
     template_name = 'news_create.html'
     form_class = PostForm
 

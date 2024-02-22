@@ -1,0 +1,11 @@
+{% extends 'flatpages/sign_default.html' %}
+
+{% block content %}
+<h2> Регистрация </h2>
+<form method="post">
+{% csrf_token %}
+<!-- автоматически формируемое представление формы в виде набора тегов <p> -->
+{{ form.as_p }}
+<input type="submit" value="Продолжить">
+</form>
+{% endblock %}

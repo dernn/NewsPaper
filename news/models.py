@@ -13,12 +13,6 @@ class Author(models.Model):
         feedback_users = sum([int(Comment.objects.filter(post=post).exclude(user=self.user).aggregate(
             rate=models.Sum('rating')).get('rate') or 0) for post in self.post_set.all()])
 
-        # feedback_users = 0
-        # for post in self.post_set.all():
-        #     rate = int(Comment.objects.filter(post_id=post.pk).exclude(user_id=self.user_id).aggregate(
-        #         rate=models.Sum('rating')).get('rate') or 0)
-        #     feedback_users += rate
-
         self.rating = post_rate + comment_rate + feedback_users
         self.save()
 

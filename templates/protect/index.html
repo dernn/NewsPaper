@@ -1,0 +1,16 @@
+{% extends 'flatpages/sign_default.html' %}
+
+{% block content %}
+    <h2>Authorized user page {{request.user.username}}</h2>
+    <div> This may contain personal information for each user </div>
+
+    <!-- Добавляем кнопку «Edit Profile», редактирование профиля -->
+    <button> <a href="sign/profile/"> Edit Profile</a> </button>
+
+    <!-- Добавляем кнопку «Get Author!», если переменная ['is_not_authors'] — True -->
+    {% if is_not_authors %}
+        <button> <a href="sign/upgrade/"> Get Author!</a> </button>
+    {% endif %}
+
+    <button> <a href="/accounts/logout/">Exit</a> </button>
+{% endblock %}
