@@ -1,6 +1,7 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-# миксин для проверки наличия прав доступа
+# миксин для проверки прав доступа
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Post
 from .filters import PostFilter
 from .forms import PostForm
@@ -53,9 +54,13 @@ class PostCreateView(PermissionRequiredMixin, CreateView):  # <-- PermissionRequ
     template_name = 'news_create.html'
     # здесь передаем в атрибут модельную форму для создания/редактирования
     form_class = PostForm
+    # поле "author" по умолчанию
+    # form_class = PostForm(initial={'author': get(current_author)})  # только как его получить из текущего юзера?
+    # + сделать поле "author" в форме PostForm(?) с атрибутом 'readonly'
 
 
-class PostUpdateView(PermissionRequiredMixin, UpdateView):  # <-- PermissionRequiredMixin : см. выше
+# здесь же проверка аутентификации
+class PostUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):  # <-- PermissionRequiredMixin : см. выше
     permission_required = ('news.change_post',)
     template_name = 'news_create.html'
     form_class = PostForm

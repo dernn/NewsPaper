@@ -1,7 +1,9 @@
 {% extends 'flatpages/sign_default.html' %}
 
 {% block content %}
-    <h2>Authorized user page {{request.user.username}}</h2>
+    <div class="space-10">
+        <h2>Authorized user page {{request.user.username}}</h2>
+    </div>
 
     <form method="POST">
         {% csrf_token %}
@@ -13,6 +15,7 @@
         </div>
         <div class="space-10">
             <input type="submit" value="Update">
+            <input type="button" value="Cancel" onclick="window.history.back()">
         </div>
     </form>
 

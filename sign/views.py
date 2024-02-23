@@ -1,14 +1,11 @@
 from django.contrib.auth.models import User
-from django.views.generic.edit import CreateView
 from django.views.generic import UpdateView
-# from .forms import BaseRegisterForm  # созданная нами модель
+
 # для апгрейда аккаунта до 'authors'
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
-
 from django.utils.decorators import method_decorator
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 # и записи в модель 'Author'
 from news.models import Author
@@ -16,26 +13,18 @@ from news.models import Author
 from .forms import UserForm
 
 
-# представление к модели BaseRegisterForm
-# class BaseRegisterView(CreateView):
-#     # модель формы, которую реализует данный дженерик
-#     model = User
-#     # форма, которая будет заполняться пользователем
-#     form_class = BaseRegisterForm
-#     # URL для редиректа пользователя после успешного ввода данных в форму
-#     success_url = '/'
-
-
 class UserUpdateView(UpdateView):
     template_name = 'sign/profile.html'
-    form_class = UserForm
+    form_class = UserForm  # (disabled)
+    success_url = '/'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
-    def get_object(self, **kwargs):
-        id = self.kwargs.get('pk')
+    def get_object(self):
+        # id авторизованного пользователя получаем из request'a
+        id = self.request.user.pk
         return User.objects.get(pk=id)
 
 
