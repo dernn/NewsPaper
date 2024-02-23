@@ -54,8 +54,10 @@ class PostCreateView(PermissionRequiredMixin, CreateView):  # <-- PermissionRequ
     template_name = 'news_create.html'
     # здесь передаем в атрибут модельную форму для создания/редактирования
     form_class = PostForm
+    form_class.base_fields['author'].disabled = True
+
     # поле "author" по умолчанию
-    # form_class = PostForm(initial={'author': get(current_author)})  # только как его получить из текущего юзера?
+    # form_class = PostForm(initial={'author': request.user.username)})  # только как его получить из текущего юзера?
     # + сделать поле "author" в форме PostForm(?) с атрибутом 'readonly'
 
 
@@ -64,6 +66,7 @@ class PostUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):  
     permission_required = ('news.change_post',)
     template_name = 'news_create.html'
     form_class = PostForm
+    form_class.base_fields['author'].disabled = True
 
     def get_object(self, **kwargs):
         id = self.kwargs.get('pk')

@@ -15,14 +15,15 @@ from .forms import UserForm
 
 class UserUpdateView(UpdateView):
     template_name = 'sign/profile.html'
-    form_class = UserForm  # (disabled)
+    form_class = UserForm
+    form_class.base_fields['email'].disabled = True
     success_url = '/'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
-    def get_object(self):
+    def get_object(self, **kwargs):
         # id авторизованного пользователя получаем из request'a
         id = self.request.user.pk
         return User.objects.get(pk=id)
