@@ -49,6 +49,17 @@ class PostCreateView(CreateView):
     # здесь передаем в атрибут модельную форму для создания/редактирования
     form_class = PostForm
 
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.author = self.request.user.author
+        # for upd. requirements D7.7
+        if self.request.path == '/articles/add/':
+            post.size = 'AR'
+        else:
+            post.size = 'NE'
+        post.save()
+        return super().form_valid(form)
+
 
 class PostUpdateView(UpdateView):
     template_name = 'news_create.html'
