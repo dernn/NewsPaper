@@ -66,6 +66,11 @@ class PostCreateView(PermissionRequiredMixin, CreateView):  # <-- PermissionRequ
     def form_valid(self, form):
         post = form.save(commit=False)
         post.author = self.request.user.author
+        # for upd. requirements D7.7
+        if self.request.path == '/articles/add/':
+            post.size = 'AR'
+        else:
+            post.size = 'NE'
         post.save()
         return super().form_valid(form)
 
