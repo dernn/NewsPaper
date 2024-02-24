@@ -13,9 +13,13 @@ from news.models import Author
 from .forms import UserForm
 
 
+# альтернативный способ декорирования класса
+# @method_decorator(login_required, name='dispatch')
+# имя декорированной функции передаем аргументов 'name='
 class UserUpdateView(UpdateView):
     template_name = 'sign/profile.html'
     form_class = UserForm
+    # отключаем возможность редактировать поле 'email'
     form_class.base_fields['email'].disabled = True
     success_url = '/'
 

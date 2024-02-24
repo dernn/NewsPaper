@@ -48,17 +48,26 @@ class SearchListView(ListView):
 
 
 class PostCreateView(PermissionRequiredMixin, CreateView):  # <-- PermissionRequiredMixin : проверка прав доступа
-    # соглашение для именования разрешений, [view-add-delete-change]:
+    # соглашение для именования разрешений, {'action': 'view-add-delete-change'}:
     # <app>.<action>_<model>
-    permission_required = ('news.add_post',)  # выдача разрешений
+    permission_required = ('news.add_post',)  # выдача разрешения {'action': 'add'} для модели 'post'
     template_name = 'news_create.html'
     # здесь передаем в атрибут модельную форму для создания/редактирования
     form_class = PostForm
-    form_class.base_fields['author'].disabled = True
 
-    # поле "author" по умолчанию
+    # отключаем возможность редактировать поле автор в форме 'PostForm'
+    # form_class.base_fields['author'].disabled = True
+    # а это удалить при следующем коммите
+
+    # значение поля "author" по умолчанию через 'initial'
     # form_class = PostForm(initial={'author': request.user.username)})  # только как его получить из текущего юзера?
-    # + сделать поле "author" в форме PostForm(?) с атрибутом 'readonly'
+
+    # альтернативное решение Field.initial/Field.disabled
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.author = self.request.user.author
+        post.save()
+        return super().form_valid(form)
 
 
 # здесь же проверка аутентификации
@@ -66,7 +75,6 @@ class PostUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):  
     permission_required = ('news.change_post',)
     template_name = 'news_create.html'
     form_class = PostForm
-    form_class.base_fields['author'].disabled = True
 
     def get_object(self, **kwargs):
         id = self.kwargs.get('pk')
