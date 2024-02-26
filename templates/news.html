@@ -25,8 +25,13 @@ News
                 <a href="{% url 'single_detail' single.id %}"><h6>{{ single.headline|censor }}</h6></a>
                 {{ single.pub_date|date:'d F, Y' }}<br>
                 {{ single.content|truncatewords:20|censor }}<br>
-                <a href="{% url 'news_update' single.id %}">Edit</a>
-                <a href="{% url 'news_delete' single.id %}">Delete</a>
+                {% if single.size == "AR" %}
+                    <a href="{% url 'articles_update' single.id %}">Edit</a>
+                    <a href="{% url 'articles_delete' single.id %}">Delete</a>
+                {% else %}
+                    <a href="{% url 'news_update' single.id %}">Edit</a>
+                    <a href="{% url 'news_delete' single.id %}">Delete</a>
+                {% endif %}
             </div>
         {% endfor %}
     {% else %}
