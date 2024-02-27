@@ -13,7 +13,7 @@ import re
 class PostsListView(ListView):
     model = Post
     ordering = '-pub_date'
-    template_name = 'news.html'
+    template_name = 'news/news.html'
     context_object_name = 'news'
     # пагинацию на основной странице поставил на 5 для наглядности,
     # чтобы в разбивке получилось больше страниц
@@ -22,7 +22,7 @@ class PostsListView(ListView):
 
 class PostsDetailView(DetailView):
     model = Post
-    template_name = 'single.html'
+    template_name = 'news/single.html'
     context_object_name = 'single'
 
 
@@ -30,7 +30,7 @@ class PostsDetailView(DetailView):
 class SearchListView(ListView):
     model = Post
     ordering = '-pub_date'
-    template_name = 'news.html'
+    template_name = 'news/news.html'
     context_object_name = 'news'
     # и в ней также немного пагинации
     paginate_by = 3
@@ -53,7 +53,7 @@ class PostCreateView(PermissionRequiredMixin, CreateView):  # <-- PermissionRequ
     # соглашение для именования разрешений, {'action': 'view-add-delete-change'}:
     # <app>.<action>_<model>
     permission_required = ('news.add_post',)  # выдача разрешения {'action': 'add'} для модели 'post'
-    template_name = 'news_create.html'
+    template_name = 'news/news_create.html'
     # здесь передаем в атрибут модельную форму для создания/редактирования
     form_class = PostForm
 
@@ -80,7 +80,7 @@ class PostCreateView(PermissionRequiredMixin, CreateView):  # <-- PermissionRequ
 # здесь же проверка аутентификации
 class PostUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):  # <-- PermissionRequiredMixin : см. выше
     permission_required = ('news.change_post',)
-    template_name = 'news_create.html'
+    template_name = 'news/news_create.html'
     form_class = PostForm
 
     def get_object(self, **kwargs):
@@ -93,7 +93,7 @@ class PostUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):  
 
         context = {'post_id': post.pk}
         if post.author.user != self.request.user:
-            return render(self.request, template_name='post_lock.html', context=context)
+            return render(self.request, template_name='news/post_lock.html', context=context)
         '''
         # проверки на соответствие размера [новость/статья]
         # объявленные шаблоны необходимо добавить в 'templates'
@@ -107,7 +107,7 @@ class PostUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):  
 
 class PostDeleteView(DeleteView):
     model = Post
-    template_name = 'news_delete.html'
+    template_name = 'news/news_delete.html'
     context_object_name = 'single'
     success_url = '/news/'
 
@@ -117,7 +117,7 @@ class PostDeleteView(DeleteView):
 
         context = {'post_id': post.pk}
         if post.author.user != self.request.user:
-            return render(self.request, template_name='post_lock.html', context=context)
+            return render(self.request, template_name='news/post_lock.html', context=context)
         '''
         # проверки на соответствие размера [новость/статья]
         # объявленные шаблоны необходимо добавить в 'templates'
