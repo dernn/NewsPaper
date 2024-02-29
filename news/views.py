@@ -119,7 +119,6 @@ class PostDeleteView(DeleteView):
         '''
         return super(PostDeleteView, self).dispatch(request, *args, **kwargs)
 
-from pprint import pprint
 
 class CategoryListView(PostsListView):
     model = Post
@@ -130,7 +129,6 @@ class CategoryListView(PostsListView):
         # добавляем в queryset атрибут 'category' с текущим инстансом Category
         self.category = get_object_or_404(Category, id=self.kwargs['pk'])
         queryset = Post.objects.filter(category=self.category).order_by('-pub_date')
-        pprint(queryset)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -139,7 +137,6 @@ class CategoryListView(PostsListView):
         # и проверяем его наличие в списке всех пользователей подписанных на категорию
         context['is_not_subscriber'] = self.request.user not in self.category.subscribers.all()
         context['category'] = self.category
-        pprint(context)
         return context
 
 
