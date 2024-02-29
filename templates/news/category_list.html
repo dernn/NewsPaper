@@ -7,20 +7,10 @@ News
 {% endblock title %}
 
 {% block content %}
-    <h1 class="space-h">All news ({{ paginator.count }})</h1>
-    <!-- condition for SearchListView-->
-    {% if filter %}
-        <div class="space-h">
-            <form method="GET">
-               {{ filter.form }}
-               <input type="submit" value="Search">
-            </form>
-            <br>
-        </div>
-    {% endif %}
+    <h1 class="space-h">All news in #{{ category }} ({{ paginator.count }})</h1>
 
-    {% if news %}
-        {% for single in news %}
+    {% if category_news %}
+        {% for single in category_news %}
             <div class="space-12">
                 <a href="{% url 'single_detail' single.id %}"><h6>{{ single.headline|censor }}</h6></a>
                 {{ single.pub_date|date:'d F, Y' }}<br>
@@ -33,7 +23,7 @@ News
                     <a href="{% url 'news_delete' single.id %}">Delete</a>
                 {% endif %}<br>
                 {% for category in single.category.all %}
-                        <a href="{% url 'category_news' category.id %}"> #{{ category }}</a>
+                    <a href="{% url 'category_news' category.id %}">#{{ category }}</a>
                 {% endfor %}
             </div>
         {% endfor %}

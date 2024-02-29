@@ -2,9 +2,10 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 # миксин для проверки прав доступа
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 #
-from django.shortcuts import render
-from .models import Post
+from django.shortcuts import render, get_object_or_404
+from .models import Post, Category
 from .filters import PostFilter
 from .forms import PostForm
 import re
@@ -15,8 +16,6 @@ class PostsListView(ListView):
     ordering = '-pub_date'
     template_name = 'news/news.html'
     context_object_name = 'news'
-    # пагинацию на основной странице поставил на 5 для наглядности,
-    # чтобы в разбивке получилось больше страниц
     paginate_by = 5
 
 
@@ -32,7 +31,6 @@ class SearchListView(ListView):
     ordering = '-pub_date'
     template_name = 'news/news.html'
     context_object_name = 'news'
-    # и в ней также немного пагинации
     paginate_by = 3
 
     def get_context_data(self, **kwargs):
@@ -56,13 +54,6 @@ class PostCreateView(PermissionRequiredMixin, CreateView):  # <-- PermissionRequ
     template_name = 'news/news_create.html'
     # здесь передаем в атрибут модельную форму для создания/редактирования
     form_class = PostForm
-
-    # отключаем возможность редактировать поле автор в форме 'PostForm'
-    # form_class.base_fields['author'].disabled = True
-    # а это удалить при следующем коммите
-
-    # значение поля "author" по умолчанию через 'initial'
-    # form_class = PostForm(initial={'author': request.user.username)})  # только как его получить из текущего юзера?
 
     # альтернативное решение Field.initial/Field.disabled
     def form_valid(self, form):
@@ -127,3 +118,36 @@ class PostDeleteView(DeleteView):
             return render(self.request, template_name='invalid_news_edit.html', context=context)
         '''
         return super(PostDeleteView, self).dispatch(request, *args, **kwargs)
+
+from pprint import pprint
+
+class CategoryListView(PostsListView):
+    model = Post
+    template_name = 'news/category_list.html'
+    context_object_name = 'category_news'
+
+    def get_queryset(self):
+        # добавляем в queryset атрибут 'category' с текущим инстансом Category
+        self.category = get_object_or_404(Category, id=self.kwargs['pk'])
+        queryset = Post.objects.filter(category=self.category).order_by('-pub_date')
+        pprint(queryset)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # берем текущего пользователя из request'a
+        # и проверяем его наличие в списке всех пользователей подписанных на категорию
+        context['is_not_subscriber'] = self.request.user not in self.category.subscribers.all()
+        context['category'] = self.category
+        pprint(context)
+        return context
+
+
+@login_required
+def subscribe(request, pk):
+    user = request.user
+    category = Category.objects.get(id=pk)
+    category.subscribers.add(user)
+
+    message = 'You have successfully subscribed to the category newsletter...'
+    return render(request, 'news/subscribe.html', {'category': category, 'message': message})  # рендерим страницу

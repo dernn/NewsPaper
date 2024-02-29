@@ -22,6 +22,8 @@ class Author(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
+    # User.<related_name>.all() : вернет все категории, к которым подписан пользователь
+    subscribers = models.ManyToManyField(User, blank=True, null=True, related_name='categories')
 
     def __str__(self):
         return self.name.title()
