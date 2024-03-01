@@ -2,5 +2,5 @@
 
 {% block content %}
     <h3 class="text-center">{{ message }} #{{ category }}</h3>
-    <input type="button" value="Back" onclick="window.history.back()">
+    <input type="button" value="Back" onclick="location.href='{% url 'category_news' category.id%}'">
 {% endblock content %}

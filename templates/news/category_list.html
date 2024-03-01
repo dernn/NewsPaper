@@ -10,11 +10,12 @@ News
     <h1 class="space-h">All news in #{{ category }} ({{ paginator.count }})</h1>
     {% if is_not_subscriber %}
         <!-- For HTML/Bootstrap etc. can use plugin 'Emmet' -->
+        <h5 class="space-h">You are not subscribed to this category</h5>
         <h5 class="space-h"><a href="{% url 'subscribe' category.id%}" class="btn btn-secondary btn-sm">Subscribe</a></h5>
     {% else %}
         <h5 class="space-h">You are subscribed to this category</h5>
-<!--        Заглушка под кнопку 'отписаться'-->
-<!--        <h5 class="space-h"><a href="{% url 'subscribe' category.id%}" class="btn btn-secondary btn-sm">Unsubscribe</a></h5>-->
+        <!-- Button 'Unsubscribe' -->
+        <h5 class="space-h"><a href="{% url 'unsubscribe' category.id%}" class="btn btn-secondary btn-sm">Unsubscribe</a></h5>
     {% endif %}
     {% if category_news %}
         {% for single in category_news %}

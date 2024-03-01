@@ -148,3 +148,13 @@ def subscribe(request, pk):
 
     message = 'You have successfully subscribed to the category newsletter'
     return render(request, 'news/subscribe.html', {'category': category, 'message': message})  # рендерим страницу
+
+
+@login_required
+def unsubscribe(request, pk):
+    user = request.user
+    category = Category.objects.get(id=pk)
+    category.subscribers.remove(user)
+
+    message = 'You have successfully unsubscribed from the category newsletter'
+    return render(request, 'news/subscribe.html', {'category': category, 'message': message})  # рендерим страницу
