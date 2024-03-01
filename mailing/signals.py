@@ -19,6 +19,6 @@ def notify_about_new_post(sender, instance, **kwargs):  # instance : объек�
         for cat in categories:
             subscribers = cat.subscribers.all()
             # формируя список для рассылки
-            subscribers_emails += [s.email for s in subscribers]
+            subscribers_emails += [s.email for s in subscribers]  # здесь лучше взять set вместо list
 
         send_notification(instance.preview, instance.pk, instance.headline, subscribers_emails)

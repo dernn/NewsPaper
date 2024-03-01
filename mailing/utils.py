@@ -9,7 +9,8 @@ def send_notification(preview, pk, headline, subscribers):
         {
             # обрезает до 124 символов, чтобы было чуть больше текста, чем ничего;
             'text': preview,  # preview здесь метод из модели Post;
-            'link': f'{settings.SITE_URL}/news/{pk}'
+            'link': f'{settings.SITE_URL}/news/{pk}',
+            # 'username': username,
         }
     )
 
