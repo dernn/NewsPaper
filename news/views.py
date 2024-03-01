@@ -146,5 +146,5 @@ def subscribe(request, pk):
     category = Category.objects.get(id=pk)
     category.subscribers.add(user)
 
-    message = 'You have successfully subscribed to the category newsletter...'
+    message = 'You have successfully subscribed to the category newsletter'
     return render(request, 'news/subscribe.html', {'category': category, 'message': message})  # рендерим страницу
