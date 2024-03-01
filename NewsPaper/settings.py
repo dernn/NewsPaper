@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import dotenv_values  # use python-dotenv
+
+config = dotenv_values()  # include all values from .env like dict
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,6 +51,8 @@ INSTALLED_APPS = [
     # первая реализация регистрации;
     # редактирование профиля
     'sign',
+    # приложение сигналов и рассылки
+    'mailing.apps.MailingConfig',  # подключение кастомного конфига (apps.MailingConfig)
 
     # приложения allauth
     'allauth',
@@ -56,8 +61,6 @@ INSTALLED_APPS = [
     # ... регистрация посредством провайдера:
     'allauth.socialaccount.providers.google',
 ]
-
-SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -178,3 +181,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+# for django.core.mail
+EMAIL_HOST = 'smtp.yandex.ru'  # адрес сервера Яндекс-почты
+EMAIL_PORT = 465  # порт smtp сервера
+# имя пользователя [до @domain]
+EMAIL_HOST_USER = config['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = config['EMAIL_HOST_PASSWORD']
+EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = config['DEFAULT_FROM_EMAIL']
+SITE_URL = 'http://127.0.0.1:8000'
