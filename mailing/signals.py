@@ -13,12 +13,11 @@ def notify_about_new_post(sender, instance, **kwargs):  # instance : объек�
     if kwargs['action'] == 'post_add':
         # получаем список всех категорий новой публикации
         categories = instance.category.all()
-        subscribers_emails = []
+        subscribers = set()
 
         # проходимся for'ом по всем категориям
         for cat in categories:
-            subscribers = cat.subscribers.all()
-            # формируя список для рассылки
-            subscribers_emails += [s.email for s in subscribers]  # здесь лучше взять set вместо list
+            # set пользователей вместо list;
+            subscribers = subscribers.union(cat.subscribers.all())
 
-        send_notification(instance.preview, instance.pk, instance.headline, subscribers_emails)
+        send_notification(instance.preview, instance.pk, instance.category, instance.headline, subscribers)
