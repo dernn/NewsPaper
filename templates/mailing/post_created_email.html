@@ -6,6 +6,7 @@
 </head>
 <body>
     <h5>Hi {{ username }}! New <a href="{{ link }}">post</a> in the category {{ category }} you are subscribed to.</h5>
-    <p>{{ text|truncatechars:50 }}</p>
+    <!-- Отключил truncatechars:50 для большей информативности -->
+    <p>{{ text }}</p>
 </body>
 </html>
