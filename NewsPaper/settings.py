@@ -119,9 +119,14 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 # подтверждение почты отключено
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 # замена стандартной формы регистрации кастомной
 ACCOUNT_FORMS = {'signup': 'sign.forms.BasicSignupForm'}
+
+# активирует аккаунт при переходе по ссылке [D9.3]
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+# количество дней "жизни" ссылки на подтверждение регистрации (default: 3)
+# ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
 
 WSGI_APPLICATION = 'NewsPaper.wsgi.application'
 
