@@ -1,0 +1,11 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+    Post restricted
+{% endblock title %}
+
+{% block content %}
+    <h2>You cannot publish more than 3 posts per day.</h2>
+    <h3><i>Come back tomorrow!</i></h3>
+    <input type="button" value="back" onclick="window.history.back()">
+{% endblock content %}
