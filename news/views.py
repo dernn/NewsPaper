@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 #
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 
 from mailing.utils import post_limit_exceeded
 from .models import Post, Category
@@ -63,8 +63,6 @@ class PostCreateView(PermissionRequiredMixin, CreateView):  # <-- PermissionRequ
         post.author = self.request.user.author
         # for D9.4
         if post_limit_exceeded(Post, post):
-            print('Post not saved')
-            print(self.get_context_data(form=form))
             return render(self.request, 'news/news_create_restrict.html')
         else:
             # for upd. requirements D7.7
@@ -73,7 +71,6 @@ class PostCreateView(PermissionRequiredMixin, CreateView):  # <-- PermissionRequ
             else:
                 post.size = 'NE'
             post.save()
-            print('Post saved')
             return super().form_valid(form)
 
 

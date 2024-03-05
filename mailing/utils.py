@@ -32,7 +32,7 @@ def send_notification(preview, pk, category, headline, subscribers):
         msg.send()
 
 
-# ресивер для: "Один пользователь не может публиковать более трёх постов в сутки" [D9.4]
+# функция для [D9.4]: "Один пользователь не может публиковать более трёх постов в сутки"
 def post_limit_exceeded(sender, instance, **kwargs):
     qty_posts = sender.objects.filter(author=instance.author,
                                       # число постов за сегодняшнюю дату [без времени]
