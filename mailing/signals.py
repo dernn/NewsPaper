@@ -1,8 +1,13 @@
-from django.db.models.signals import m2m_changed
+from datetime import datetime
+from pprint import pprint
+
+from django.core.exceptions import ValidationError
+from django.db.models.signals import m2m_changed, pre_save
 from django.dispatch import receiver
+from django.shortcuts import redirect
 
 from mailing.utils import send_notification
-from news.models import PostCategory
+from news.models import PostCategory, Post
 
 
 # в ресивер передаем событие присваивания категории публикации
@@ -21,3 +26,14 @@ def notify_about_new_post(sender, instance, **kwargs):  # instance : объек�
             subscribers = subscribers.union(cat.subscribers.all())
 
         send_notification(instance.preview, instance.pk, instance.category, instance.headline, subscribers)
+
+
+# ресивер для: "Один пользователь не может публиковать более трёх постов в сутки" [D9.4]
+@receiver(pre_save, sender=Post)
+def post_limit_exceeded(sender, instance, **kwargs):
+    qty_posts = sender.objects.filter(author=instance.author_id,
+                                      # число постов за сегодняшнюю дату [без времени]
+                                      pub_date__date=datetime.now().date(),)
+
+    if qty_posts.count() > 2:
+        raise ValidationError('You cannot publish more than 3 posts per day.')
