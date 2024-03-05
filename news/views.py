@@ -4,7 +4,9 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 #
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+
+from mailing.utils import post_limit_exceeded
 from .models import Post, Category
 from .filters import PostFilter
 from .forms import PostForm
@@ -59,13 +61,20 @@ class PostCreateView(PermissionRequiredMixin, CreateView):  # <-- PermissionRequ
     def form_valid(self, form):
         post = form.save(commit=False)
         post.author = self.request.user.author
-        # for upd. requirements D7.7
-        if self.request.path == '/articles/add/':
-            post.size = 'AR'
+        # for D9.4
+        if post_limit_exceeded(Post, post):
+            print('Post not saved')
+            print(self.get_context_data(form=form))
+            return render(self.request, 'news/news_create_restrict.html')
         else:
-            post.size = 'NE'
-        post.save()
-        return super().form_valid(form)
+            # for upd. requirements D7.7
+            if self.request.path == '/articles/add/':
+                post.size = 'AR'
+            else:
+                post.size = 'NE'
+            post.save()
+            print('Post saved')
+            return super().form_valid(form)
 
 
 # здесь же проверка аутентификации
