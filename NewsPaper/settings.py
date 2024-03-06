@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'sign',
     # приложение сигналов и рассылки
     'mailing.apps.MailingConfig',  # подключение кастомного конфига (apps.MailingConfig)
+    # for D9.5: weekly mailing
+    'django_apscheduler',
 
     # приложения allauth
     'allauth',
@@ -196,3 +198,8 @@ EMAIL_HOST_PASSWORD = config['EMAIL_HOST_PASSWORD']
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = config['DEFAULT_FROM_EMAIL']
 SITE_URL = 'http://127.0.0.1:8000'
+
+# for D9.5: weekly mailing
+# See https://docs.djangoproject.com/en/dev/ref/settings/#datetime-format for format string syntax details.
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
