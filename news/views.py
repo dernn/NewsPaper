@@ -71,6 +71,8 @@ class PostCreateView(PermissionRequiredMixin, CreateView):  # <-- PermissionRequ
             else:
                 post.size = 'NE'
             post.save()
+            # alt. for D10.5: вызов таски при сохранении объекта
+            # celery_notify_new_post.delay(form.instance.pk)
             return super().form_valid(form)
 
 
