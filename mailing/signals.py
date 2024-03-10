@@ -2,7 +2,6 @@ from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 
 from mailing.tasks import celery_notify_new_post
-from mailing.utils import send_notification
 from news.models import PostCategory
 
 

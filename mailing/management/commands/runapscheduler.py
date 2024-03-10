@@ -2,7 +2,6 @@
 Дополнительная команда 'runapscheduler' для manage.py.
 Созданные здесь задания можно также запустить из админки.
 """
-import datetime
 import logging
 
 from django.conf import settings
@@ -10,48 +9,15 @@ from django.conf import settings
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 from django.core.management.base import BaseCommand
-from django.template.loader import render_to_string
 from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 
-from django.core.mail import send_mail, EmailMultiAlternatives
-
-from news.models import Post, Category
+from mailing.utils import weekly_mailing
 
 logger = logging.getLogger(__name__)
 
 
-# функция еженедельной рассылки
-def weekly_mailing():  # вынести в utils
-    #  Your job processing logic here...
-    today = datetime.datetime.now()
-    last_week = today - datetime.timedelta(days=7)
-    posts = Post.objects.filter(pub_date__gte=last_week)  # lookup __gte
-    categories = set(posts.values_list('category__name', flat=True))
-    categories.remove(None)
-    subscribers = set(Category.objects.filter(name__in=categories).values_list('subscribers__email', flat=True))
-
-    html_content = render_to_string(
-        'mailing/weekly_news.html',
-        {
-            'link': settings.SITE_URL,
-            'posts': posts,
-        }
-    )
-
-    # время отправки без микросекунд для заголовка
-    sending_time = datetime.datetime.now().replace(microsecond=0)
-
-    msg = EmailMultiAlternatives(
-        subject=f'News from last week {sending_time}',  # тема письма
-        body='',
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=subscribers
-    )
-
-    msg.attach_alternative(html_content, 'text/html')
-    msg.send()
-    print(f'msg sent {sending_time}')
+# функция еженедельной рассылки теперь в mailing.utils
 
 
 # функция, которая будет удалять неактуальные задачи

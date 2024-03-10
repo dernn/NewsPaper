@@ -1,8 +1,10 @@
-from datetime import datetime
+import datetime
 
 from django.conf import settings  # LazySettings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+
+from news.models import Post, Category
 
 
 def send_notification(preview, pk, category, headline, subscribers):
@@ -36,7 +38,39 @@ def send_notification(preview, pk, category, headline, subscribers):
 def post_limit_exceeded(sender, instance, **kwargs):
     qty_posts = sender.objects.filter(author=instance.author,
                                       # число постов за сегодняшнюю дату [без времени]
-                                      pub_date__date=datetime.now().date(), )
+                                      pub_date__date=datetime.datetime.now().date(), )
 
     if qty_posts.count() > 2:
         return True
+
+
+def weekly_mailing():  # вынести в utils
+    #  Your job processing logic here...
+    today = datetime.datetime.now()
+    last_week = today - datetime.timedelta(days=7)
+    posts = Post.objects.filter(pub_date__gte=last_week)  # lookup __gte
+    categories = set(posts.values_list('category__name', flat=True))
+    categories.remove(None)
+    subscribers = set(Category.objects.filter(name__in=categories).values_list('subscribers__email', flat=True))
+
+    html_content = render_to_string(
+        'mailing/weekly_news.html',
+        {
+            'link': settings.SITE_URL,
+            'posts': posts,
+        }
+    )
+
+    # время отправки без микросекунд для заголовка
+    sending_time = datetime.datetime.now().replace(microsecond=0)
+
+    msg = EmailMultiAlternatives(
+        subject=f'News from last week {sending_time}',  # тема письма
+        body='',
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=subscribers
+    )
+
+    msg.attach_alternative(html_content, 'text/html')
+    msg.send()
+    print(f'msg sent {sending_time}')
