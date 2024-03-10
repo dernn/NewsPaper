@@ -1,6 +1,7 @@
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 
+from mailing.tasks import celery_notify_new_post
 from mailing.utils import send_notification
 from news.models import PostCategory
 
@@ -11,13 +12,7 @@ from news.models import PostCategory
 def notify_about_new_post(sender, instance, **kwargs):  # instance : объект статьи
     # будет реагировать только на создание нового поста
     if kwargs['action'] == 'post_add':
-        # получаем список всех категорий новой публикации
-        categories = instance.category.all()
-        subscribers = set()
+        # при срабатывании вызываем celery-задачу (@shared_task)
+        celery_notify_new_post.delay(instance.pk)  # delay() передаём не объект, но только id
+        # вся логика сигнала теперь в mailing.tasks [celery, D10.5]
 
-        # проходимся for'ом по всем категориям
-        for cat in categories:
-            # set пользователей вместо list;
-            subscribers = subscribers.union(cat.subscribers.all())
-
-        send_notification(instance.preview, instance.pk, instance.category, instance.headline, subscribers)
