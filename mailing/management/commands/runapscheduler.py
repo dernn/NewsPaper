@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 # функция еженедельной рассылки
-def weekly_mailing():
+def weekly_mailing():  # вынести в utils
     #  Your job processing logic here...
     today = datetime.datetime.now()
     last_week = today - datetime.timedelta(days=7)
