@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-me-c^ey#0b-n0zi60ya3nx!1sw306k+-@q_p%+^6g87h3xom^j'
+SECRET_KEY = config['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -203,3 +203,10 @@ SITE_URL = 'http://127.0.0.1:8000'
 # See https://docs.djangoproject.com/en/dev/ref/settings/#datetime-format for format string syntax details.
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
+
+# for D10.3: Celery settings
+CELERY_BROKER_URL = f'redis://:{config["REDIS_PASSWORD"]}@{config["REDIS_ENDPOINT"]}'
+CELERY_RESULT_BACKEND = f'redis://:{config["REDIS_PASSWORD"]}@{config["REDIS_ENDPOINT"]}'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
