@@ -1,6 +1,6 @@
 from celery import shared_task
 
-from mailing.utils import send_notification
+from mailing.utils import send_notification, weekly_mailing
 from news.models import Post
 
 
@@ -17,3 +17,9 @@ def celery_notify_new_post(pk):
 
     send_notification(instance.preview, instance.pk, instance.category, instance.headline, subscribers)
 
+
+@shared_task
+def celery_weekly_mailing():
+    # функцию еженедельной рассылки импортируем из утилит,
+    # повторно используя ранее написанную логику для django-apscheduler
+    weekly_mailing()

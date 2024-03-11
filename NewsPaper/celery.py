@@ -14,10 +14,11 @@ app.autodiscover_tasks()
 # celery -A <project_name> beat -l INFO
 
 # for D10.5: Periodic Tasks #crontab
-# app.conf.beat_schedule = {
-#     'mailing_every_monday_8am': {
-#         'task': 'mailing.tasks.weekly_mailing',
-#         # каждый понедельник в 8.00 утра
-#         'schedule': crontab(minute=0, hour=8, day_of_week='monday'),
-#     },
-# }
+app.conf.beat_schedule = {
+    'mailing_every_monday_8am': {
+        'task': 'mailing.tasks.celery_weekly_mailing',
+        # каждый понедельник в 8.00 утра
+        'schedule': crontab(minute=0, hour=8, day_of_week='mon'),
+        'args': (),
+    },
+}
