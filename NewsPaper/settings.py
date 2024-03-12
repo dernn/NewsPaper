@@ -74,11 +74,6 @@ MIDDLEWARE = [
 
     # настройки middleware для allauth
     "allauth.account.middleware.AccountMiddleware",
-
-    # for D11.3: site cache
-    'django.middleware.cache.UpdateCacheMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'NewsPaper.urls'
