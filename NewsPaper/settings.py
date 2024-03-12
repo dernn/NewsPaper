@@ -18,7 +18,6 @@ config = dotenv_values()  # include all values from .env like dict
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -29,7 +28,6 @@ SECRET_KEY = config['SECRET_KEY']
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -76,6 +74,11 @@ MIDDLEWARE = [
 
     # настройки middleware для allauth
     "allauth.account.middleware.AccountMiddleware",
+
+    # for D11.3: site cache
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'NewsPaper.urls'
@@ -132,7 +135,6 @@ ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 
 WSGI_APPLICATION = 'NewsPaper.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -142,7 +144,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -162,7 +163,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -173,7 +173,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = False
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -212,3 +211,14 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 # triggered repeatedly
 # CELERY_ENABLE_UTC = False  # because of this
+
+# for D11.3: Filesystem caching
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        # Указываем, куда будем сохранять кэшируемые файлы
+        # Не забываем создать папку cache_files внутри папки с manage.py
+        'LOCATION': BASE_DIR / 'cache_files',
+        'TIMEOUT': 60,  # 60 sec; default value 300
+    }
+}
