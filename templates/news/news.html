@@ -1,5 +1,6 @@
 {% extends 'flatpages/default.html' %}
 
+{% load cache %}
 {% load custom_filters %}
 
 {% block title %}
@@ -42,23 +43,25 @@ News
         <h4>Why is there no news here?</h4>
     {% endif %}
 
-    {% if is_paginated %}
-        <!-- а здесь переходы на первую -->
-        {% if page_obj.has_previous and page_obj.number > 2 %}
-            <a href="?page=1&{{ params }}"><<<</a>
-        {% endif %}
-
-        {% for num in page_obj.paginator.page_range %}
-            {% if page_obj.number == num %}
-                <a>{{ num }}</a>
-            {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'3' %}
-                <a href="?page={{ num }}&{{ params }}">{{ num }}</a>
+    {% cache 600 pagination %}
+        {% if is_paginated %}
+            <!-- а здесь переходы на первую -->
+            {% if page_obj.has_previous and page_obj.number > 2 %}
+                <a href="?page=1&{{ params }}"><<<</a>
             {% endif %}
-        {% endfor %}
 
-        <!-- и на последнюю страницу соответсвенно -->
-        {% if page_obj.has_next and page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
-            <a href="?page={{ page_obj.paginator.num_pages }}&{{ params }}">>>></a>
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <a>{{ num }}</a>
+                {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'3' %}
+                    <a href="?page={{ num }}&{{ params }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            <!-- и на последнюю страницу соответсвенно -->
+            {% if page_obj.has_next and page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
+                <a href="?page={{ page_obj.paginator.num_pages }}&{{ params }}">>>></a>
+            {% endif %}
         {% endif %}
-    {% endif %}
+    {% endcache %}
 {% endblock content %}

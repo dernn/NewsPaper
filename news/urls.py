@@ -1,12 +1,16 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page  #
+
 from .views import PostsListView, PostsDetailView, SearchListView, PostCreateView, PostUpdateView, PostDeleteView
 from .views import subscribe, unsubscribe
 # for D9.2
 from .views import CategoryListView
 
 urlpatterns = [
-    path('', PostsListView.as_view()),
-    path('<int:pk>', PostsDetailView.as_view(), name='single_detail'),
+    # кэширование главной страницы новостей, 1 минута
+    path('', cache_page(60 * 1)(PostsListView.as_view())),
+    # кэширование на страницу отдельной новости, 5 минут
+    path('<int:pk>', cache_page(60 * 5)(PostsDetailView.as_view()), name='single_detail'),
     # страничка фильтра поиска
     path('search/', SearchListView.as_view(), name='news_search'),
     # страничка создания записи
