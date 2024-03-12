@@ -12,6 +12,15 @@ from .filters import PostFilter
 from .forms import PostForm
 import re
 
+from django.views.decorators.cache import cache_page  # декоратор для кэширования отдельного представления-функции
+
+
+# В аргументы к декоратору передаём количество секунд, которые хотим, чтобы страница держалась в кэше.
+# Внимание! Пока страница находится в кэше, изменения, происходящие на ней, учитываться не будут!
+@cache_page(60 * 15)
+def my_view(request):
+    ...
+
 
 class PostsListView(ListView):
     model = Post
