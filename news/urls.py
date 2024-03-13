@@ -10,7 +10,7 @@ urlpatterns = [
     # кэширование главной страницы новостей, 1 минута
     path('', cache_page(60 * 1)(PostsListView.as_view())),
     # кэширование на страницу отдельной новости, 5 минут
-    path('<int:pk>', cache_page(60 * 5)(PostsDetailView.as_view()), name='single_detail'),
+    path('<int:pk>', PostsDetailView.as_view(), name='single_detail'),
     # страничка фильтра поиска
     path('search/', SearchListView.as_view(), name='news_search'),
     # страничка создания записи

@@ -1,9 +1,10 @@
+from django.core.cache import cache  # cache import
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 # миксин для проверки прав доступа
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-#
+# raises 'Http404' instead of the model’s 'DoesNotExist' exception
 from django.shortcuts import render, get_object_or_404
 
 from mailing.utils import post_limit_exceeded
@@ -25,6 +26,20 @@ class PostsDetailView(DetailView):
     model = Post
     template_name = 'news/single.html'
     context_object_name = 'single'
+
+    # for D11.4: The low-level cache API
+    def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта
+        obj = cache.get(f'post-{self.kwargs["pk"]}',
+                        None)
+        # Кэш очень похож на словарь, и метод get действует так же.
+        # Он забирает значение по ключу, и если его нет, то забирает None.
+
+        # если объекта нет в кэше, то получаем его и записываем в кэш
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'post-{self.kwargs["pk"]}', obj)
+
+        return obj
 
 
 # отдельная вьюшка под поиск
