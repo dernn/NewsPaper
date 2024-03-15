@@ -1,5 +1,6 @@
 from django.urls import path
-from news.views import PostCreateView, PostUpdateView, PostDeleteView
+
+from news.views import PostCreateView, PostDeleteView, PostUpdateView
 
 urlpatterns = [
     # for upd. requirements D7.7

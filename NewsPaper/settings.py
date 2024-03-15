@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+
 from dotenv import dotenv_values  # use python-dotenv
 
 config = dotenv_values()  # include all values from .env like dict
