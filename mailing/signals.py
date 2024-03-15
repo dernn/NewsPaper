@@ -14,4 +14,3 @@ def notify_about_new_post(sender, instance, **kwargs):  # instance : объек�
         # при срабатывании вызываем celery-задачу (@shared_task)
         celery_notify_new_post.delay(instance.pk)  # delay() передаём не объект, но только id
         # вся логика сигнала теперь в mailing.tasks [celery, D10.5]
-

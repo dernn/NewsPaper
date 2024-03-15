@@ -7,6 +7,6 @@ Study Web project on Django
 * SingIn/SignUp app on django-allauth
   * OAuth2 on Google Ads API
   * User groups/permissions
-* Mailing app
-* Celery/Redis scheduler app
-* Django’s cache framework
+* Mailing/Scheduler app on django-apscheduler
+* Celery async scheduler app on Redis
+* Cache on Django’s cache framework
