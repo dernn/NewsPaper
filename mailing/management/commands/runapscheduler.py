@@ -36,7 +36,8 @@ class Command(BaseCommand):
         # добавляем работу нашему задачнику
         scheduler.add_job(
             weekly_mailing,
-            trigger=CronTrigger(day_of_week="wed", hour="16", minute="30"),  # еженедельная рассылка
+            # еженедельная рассылка
+            trigger=CronTrigger(day_of_week="wed", hour="16", minute="30"),
             id="weekly_mailing",  # уникальный id
             max_instances=1,
             replace_existing=True,
