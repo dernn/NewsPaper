@@ -10,3 +10,4 @@ Study Web project on Django
 * Mailing/Scheduler app on django-apscheduler
 * Celery async scheduler app on Redis
 * Cache on Django’s cache framework
+* Flake8 Style Guide

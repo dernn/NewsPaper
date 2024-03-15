@@ -1,3 +1,8 @@
 [flake8]
 ignore = E501
 exclude = .\news\migrations\
+
+# import-order settings
+application-import-names = .\news\, .\articles\  # директории, которые будет проверять плагин импорта
+# стайлгайд, согласно которому проверяется импорт (cryptography по умолчанию).
+import-order-style = google
