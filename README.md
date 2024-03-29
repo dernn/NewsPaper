@@ -11,3 +11,4 @@ Study Web project on Django
 * Celery async scheduler app on Redis
 * Cache on Django’s cache framework
 * Flake8 Style Guide
+* Logging
