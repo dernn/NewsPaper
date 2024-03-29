@@ -317,12 +317,13 @@ LOGGING = {
         'django.request': {
             'handlers': ['file_errors', 'mail_admins', ],
             'level': 'ERROR',
-            'propagate': False,
+            # все сообщение дочерних журналов логирования также попадают в родительский ['django']
+            'propagate': True,
         },
         'django.server': {
             'handlers': ['file_errors', 'mail_admins', ],
             'level': 'ERROR',
-            'propagate': False,
+            'propagate': True,
         },
         'django.template': {
             'handlers': ['file_errors', ],
@@ -332,7 +333,7 @@ LOGGING = {
         'django.db.backends': {
             'handlers': ['file_errors', ],
             'level': 'ERROR',
-            'propagate': False,
+            'propagate': True,
         },
         'django.security': {
             'handlers': ['file_security', ],
