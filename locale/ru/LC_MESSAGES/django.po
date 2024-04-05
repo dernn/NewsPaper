@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-05 13:50+0600\n"
+"POT-Creation-Date: 2024-04-05 15:58+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,42 @@ msgstr ""
 
 #: .\fpages\admin.py:10
 msgid "Advanced options"
+msgstr ""
+
+#: .\news\models.py:42
+msgid "Author"
+msgstr "Автор"
+
+#: .\news\models.py:47
+msgid "Post size"
+msgstr "Размер поста"
+
+#: .\news\models.py:48
+msgid "Size"
+msgstr "Размер"
+
+#: .\news\models.py:50
+msgid "Pud Date"
+msgstr "Дата публикации"
+
+#: .\news\models.py:52
+msgid "Headline"
+msgstr "Заголовок"
+
+#: .\news\models.py:53
+msgid "Content"
+msgstr "Контент"
+
+#: .\news\models.py:54
+msgid "Rating"
+msgstr "Рейтинг"
+
+#: .\templates\admin\base_site.html:4
+msgid "Django site admin"
+msgstr ""
+
+#: .\templates\admin\base_site.html:7
+msgid "Django administration"
 msgstr ""
 
 #: .\templates\allauth\layouts\base.html:19
@@ -52,41 +88,39 @@ msgstr "Зарегистрироваться"
 msgid "News. It's simple"
 msgstr "Новости. Это просто"
 
-#: .\templates\flatpages\default.html:30
+#: .\templates\flatpages\default.html:50
 msgid "Home"
 msgstr "Главная"
 
-#: .\templates\flatpages\default.html:31
+#: .\templates\flatpages\default.html:51
 msgid "Search"
 msgstr "Поиск"
 
-#: .\templates\flatpages\default.html:33
+#: .\templates\flatpages\default.html:53
 msgid "Dropdown"
 msgstr "Дропдаун"
 
-#: .\templates\flatpages\default.html:35
+#: .\templates\flatpages\default.html:55
 msgid "Add news"
 msgstr "Добавить новость"
 
-#: .\templates\flatpages\default.html:36
+#: .\templates\flatpages\default.html:56
 msgid "Add articles"
 msgstr "Добавить статью"
 
-#: .\templates\flatpages\default.html:39
+#: .\templates\flatpages\default.html:59
 msgid "Something else here"
 msgstr "Чего-нибудь туть"
 
-#: .\templates\flatpages\default.html:43
+#: .\templates\flatpages\default.html:63
 msgid "Profile"
 msgstr "Профиль"
 
-#: .\templates\flatpages\default.html:44
+#: .\templates\flatpages\default.html:64
 msgid "Logout"
 msgstr "Выйти"
 
-#: .\templates\flatpages\default.html:46
-#, fuzzy
-#| msgid "Sign In"
+#: .\templates\flatpages\default.html:66
 msgid "Sign in"
 msgstr "Войти"
 

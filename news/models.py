@@ -1,6 +1,7 @@
+from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.db import models
-from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 
 
 class Author(models.Model):
@@ -37,15 +38,20 @@ class Post(models.Model):
         (article, 'Article'),
         (news, 'News')
     ]
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE,
+                               verbose_name=_('Author'),
+                               )
     size = models.CharField(max_length=2,
                             choices=SIZE,
-                            default=news)
-    pub_date = models.DateTimeField(auto_now_add=True)
+                            default=news,
+                            help_text=_('Post size'),
+                            verbose_name=_('Size')
+                            )
+    pub_date = models.DateTimeField(auto_now_add=True, verbose_name=_('Pud Date'))
     category = models.ManyToManyField(Category, through='PostCategory')
-    headline = models.CharField(max_length=60)
-    content = models.TextField()
-    rating = models.IntegerField(default=0)
+    headline = models.CharField(max_length=60, verbose_name=_('Headline'))
+    content = models.TextField(verbose_name=_('Content'))
+    rating = models.IntegerField(default=0, verbose_name=_('Rating'))
 
     def like(self):
         self.rating += 1
