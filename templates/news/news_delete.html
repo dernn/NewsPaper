@@ -1,6 +1,7 @@
 {% extends 'flatpages/default.html' %}
 
 {% load custom_filters %}
+{% load i18n %}
 
 {% block title %}
 Deleting
@@ -8,7 +9,7 @@ Deleting
 
 {% block content %}
     <div class="space-10">
-        <h2>Are you sure you want to delete this post?</h2>
+        <h2>{% translate "Are you sure you want to delete this post?" %}</h2>
     </div>
     <div class="space-10">
         <h6>{{ single.headline|censor }}</h6>
