@@ -12,4 +12,4 @@ Study Web project on Django
 * Cache on Django’s cache framework
 * Flake8 Style Guide
 * Logging
-* Localization [I18N]
+* Localization
