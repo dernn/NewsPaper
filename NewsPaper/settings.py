@@ -81,6 +81,7 @@ MIDDLEWARE = [
 
     # настройки middleware для allauth
     "allauth.account.middleware.AccountMiddleware",
+    'news.middlewares.TimezoneMiddleware',  # custom timezone middleware
 ]
 
 ROOT_URLCONF = 'NewsPaper.urls'
@@ -101,6 +102,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'news.context_processors.tz_ctime',  # добавляем tz-контекст для всех вьюшек
             ],
         },
     },

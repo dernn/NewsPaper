@@ -2,6 +2,7 @@
 
 {% load cache %}  <!-- Загружаем кэширование -->
 {% load i18n %}  <!-- Загружаем библиотеку для перевода -->
+{% load tz %}  <!-- Также загружаем тег для работы с часовыми поясами -->
 
 <html lang="en">
     {% cache 600 head %}  <!-- Кэшируем блок head на 10 минут -->
@@ -43,6 +44,30 @@
                         </select>
                         <input type="submit" value="Go">
                     </form>
+
+                    {% get_current_timezone as TIME_ZONE %}
+                    <form action="{% url 'set_timezone' %}" method="POST">
+                        {% csrf_token %}
+                        <li>
+                            <label style="color:#fff" for="timezone">Time zone:</label>
+                            <select name="timezone">
+                                {% for tz in timezones %}
+                                <option value="{{ tz }}"{% if tz == TIME_ZONE %} selected {% endif %}>{{ tz }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="submit" value="Set">
+                        </li>
+                    </form>
+
+                    <!-- Отображаем время в выбранном часовом поясе  -->
+                    <div style="color:#fff">
+                        <ul class="navbar-nav ms-lg-4 mb-2 mb-lg-0">
+                            <div>
+                                <li>{{ TIME_ZONE }}</li>
+                                <li>{{ current_time|timezone:TIME_ZONE }}</li>
+                            </div>
+                        </ul>
+                    </div>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">

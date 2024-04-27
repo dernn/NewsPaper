@@ -2,7 +2,7 @@ from django.urls import path
 from django.views.decorators.cache import cache_page  #
 
 from .views import PostsListView, PostsDetailView, SearchListView, PostCreateView, PostUpdateView, PostDeleteView
-from .views import subscribe, unsubscribe
+from .views import subscribe, unsubscribe, set_timezone
 # for D9.2
 from .views import CategoryListView
 
@@ -23,4 +23,5 @@ urlpatterns = [
     path('category/<int:pk>', CategoryListView.as_view(), name='category_news'),
     path('category/<int:pk>/subscribe', subscribe, name='subscribe'),
     path('category/<int:pk>/unsubscribe', unsubscribe, name='unsubscribe'),
+    path('set_timezone/', set_timezone, name='set_timezone'),
 ]

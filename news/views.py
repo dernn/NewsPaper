@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 # raises 'Http404' instead of the model’s 'DoesNotExist' exception
 from django.shortcuts import render, get_object_or_404
-
+from django.shortcuts import redirect  # for set_timezone function view [D17.5]
 from mailing.utils import post_limit_exceeded
 from .models import Post, Category
 from .filters import PostFilter
@@ -181,3 +181,9 @@ def unsubscribe(request, pk):
 
     message = 'You have successfully unsubscribed from the category newsletter'
     return render(request, 'news/subscribe.html', {'category': category, 'message': message})  # рендерим страницу
+
+
+#  по пост-запросу будем добавлять в сессию часовой пояс, который и будет обрабатываться кастомным middleware
+def set_timezone(request):
+    request.session['django_timezone'] = request.POST['timezone']
+    return redirect(request.META.get('HTTP_REFERER'))  # redirects to the previous page
