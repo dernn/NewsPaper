@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 
-{% load cache %}  <!-- Загружаем кэширование -->
 {% load i18n %}  <!-- Загружаем библиотеку для перевода -->
 {% load tz %}  <!-- Также загружаем тег для работы с часовыми поясами -->
 
 <html lang="en">
-    {% cache 600 head %}  <!-- Кэшируем блок head на 10 минут -->
         <head>
             <meta charset="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -18,56 +16,59 @@
             <!-- Core theme CSS (includes Bootstrap)-->
             <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
             <link href="{% static 'css/custom.css' %}" rel="stylesheet" />
+            <!-- Меняем оформление сайта в зависимости от времени суток  -->
+            <style>
+                body {background-color: {% if current_time.hour >= 19 or current_time.hour <= 7 %} #ECECEA {% endif %};}
+            </style>
         </head>
-    {% endcache %}
     <body>
         <!-- Responsive navbar-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="#">{% translate "News. It's simple" %}</a>  <!--Geekaggr.egate/.gate-->
 
-                    <form action="{% url 'set_language' %}" method="POST">
-                        {% csrf_token %} <!-- Не забываем про csrf_token для POST запросов -->
-                        <input type="hidden" name="next" value="{{ redirect_to }}">
+                <form action="{% url 'set_language' %}" method="POST">
+                    {% csrf_token %} <!-- Не забываем про csrf_token для POST запросов -->
+                    <input type="hidden" name="next" value="{{ redirect_to }}">
 
-                        <select name="language" id="">
-                            {% get_current_language as LANGUAGE_CODE %}  <!-- set current language -->
-                            {% get_available_languages as LANGUAGES %}  <!-- переопределенный LANGUAGES [settings] -->
-                            {% get_language_info_list for LANGUAGES as languages %}
+                    <select name="language" id="">
+                        {% get_current_language as LANGUAGE_CODE %}  <!-- set current language -->
+                        {% get_available_languages as LANGUAGES %}  <!-- переопределенный LANGUAGES [settings] -->
+                        {% get_language_info_list for LANGUAGES as languages %}
 
-                            <!-- Итерируем список и выводим название языка и его -->
-                            {% for language in languages %}
-                                <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected {% endif %}>
-                                    {{ language.name_local }} - {{ language.code }}
-                                </option>
+                        <!-- Итерируем список и выводим название языка и его -->
+                        {% for language in languages %}
+                            <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected {% endif %}>
+                                {{ language.name_local }} - {{ language.code }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" value="Go">
+                </form>
+
+                {% get_current_timezone as TIME_ZONE %}
+                <form action="{% url 'set_timezone' %}" method="POST">
+                    {% csrf_token %}
+                    <li>
+                        <label style="color:#fff" for="timezone">Time zone:</label>
+                        <select name="timezone">
+                            {% for tz in timezones %}
+                            <option value="{{ tz }}"{% if tz == TIME_ZONE %} selected {% endif %}>{{ tz }}</option>
                             {% endfor %}
                         </select>
-                        <input type="submit" value="Go">
-                    </form>
+                        <input type="submit" value="Set">
+                    </li>
+                </form>
 
-                    {% get_current_timezone as TIME_ZONE %}
-                    <form action="{% url 'set_timezone' %}" method="POST">
-                        {% csrf_token %}
-                        <li>
-                            <label style="color:#fff" for="timezone">Time zone:</label>
-                            <select name="timezone">
-                                {% for tz in timezones %}
-                                <option value="{{ tz }}"{% if tz == TIME_ZONE %} selected {% endif %}>{{ tz }}</option>
-                                {% endfor %}
-                            </select>
-                            <input type="submit" value="Set">
-                        </li>
-                    </form>
-
-                    <!-- Отображаем время в выбранном часовом поясе  -->
-                    <div style="color:#fff">
-                        <ul class="navbar-nav ms-lg-4 mb-2 mb-lg-0">
-                            <div>
-                                <li>{{ TIME_ZONE }}</li>
-                                <li>{{ current_time|timezone:TIME_ZONE }}</li>
-                            </div>
-                        </ul>
-                    </div>
+                <!-- Отображаем время в выбранном часовом поясе  -->
+                <div style="color:#fff">
+                    <ul class="navbar-nav ms-lg-4 mb-2 mb-lg-0">
+                        <div>
+                            <li>{{ TIME_ZONE }}</li>
+                            <li>{{ current_time|timezone:TIME_ZONE }}</li>
+                        </div>
+                    </ul>
+                </div>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
