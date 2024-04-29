@@ -4,6 +4,6 @@ import pytz  # стандартный модуль для работы с час
 
 def tz_ctime(request):
     return {
-        'current_time': timezone.now(),
+        'current_time': timezone.localtime(),
         'timezones': pytz.common_timezones,  # добавляем все доступные часовые пояса
     }
