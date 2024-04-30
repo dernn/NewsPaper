@@ -1,0 +1,55 @@
+openapi: "3.0.2"
+info:
+  title: 'NewsPortal API'
+  version: '0.0.1'
+paths:
+  /news/:
+    get:
+      operationId: listPosts
+      description: 'List of post (news & articles)'
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://127.0.0.1:8000/news/
+                  content:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: "render entire news.html-template [with default.html]"
+                items:
+                  $ref: '#/components/schemas/Post'
+          description: 'OK'
+      tags:
+      - posts
+components:
+  schemas:
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        size:
+          type: string
+          readOnly: true
+          maxLength: 2
+        name:
+          type: string
+          maxLength: 64
+        pub_date:
+          type: string
+          maxLength: 64
+        url:
+          type: string
+          readOnly: true
+      required:
+      - name

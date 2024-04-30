@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.views.generic import TemplateView
 
 urlpatterns = [
     # эндпоинты для работы с локализацией [переключение языка]
@@ -30,4 +31,8 @@ urlpatterns = [
     path('sign/', include('sign.urls')),
     # подключаем также ссылки из приложения 'allauth'
     path('accounts/', include('allauth.urls')),
+    path('swagger-ui/', TemplateView.as_view(
+        template_name='swagger-ui.html',
+        extra_context={'schema_url': 'openapi-schema'}
+    ), name='swagger-ui'),
 ]
