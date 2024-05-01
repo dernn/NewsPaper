@@ -227,6 +227,12 @@ CELERY_RESULT_SERIALIZER = 'json'
 # triggered repeatedly
 # CELERY_ENABLE_UTC = False  # because of this
 
+REST_FRAMEWORK = {
+   'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+   'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+   'PAGE_SIZE': 5
+}
+
 # for D11.3: Filesystem caching
 CACHES = {
     'default': {
