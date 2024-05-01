@@ -13,3 +13,4 @@ Study Web project on Django
 * Flake8 Style Guide
 * Logging
 * Localization
+* DRF, OpenAPI, Swagger

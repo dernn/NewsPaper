@@ -16,6 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import TemplateView
+from rest_framework import routers
+
+from news.views import PostsViewSet, AuthorViewSet, CategoryViewSet
+
+router = routers.DefaultRouter()
+router.register(r'posts', PostsViewSet)
+router.register(r'authors', AuthorViewSet)
+router.register(r'category', CategoryViewSet)
 
 urlpatterns = [
     # эндпоинты для работы с локализацией [переключение языка]
@@ -35,4 +43,5 @@ urlpatterns = [
         template_name='swagger-ui.html',
         extra_context={'schema_url': 'openapi-schema'}
     ), name='swagger-ui'),
+    path('api/', include(router.urls)),  # DRF url's [D18.6]
 ]

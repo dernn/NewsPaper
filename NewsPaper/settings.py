@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'mailing.apps.MailingConfig',
     # for D9.5: weekly mailing
     'django_apscheduler',
+    'rest_framework',  # [D18.6]
 
     # приложения allauth
     'allauth',

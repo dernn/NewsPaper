@@ -1,17 +1,23 @@
-from django.core.cache import cache  # cache import
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+import re
+
 # миксин для проверки прав доступа
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.core.cache import cache  # cache import
 # raises 'Http404' instead of the model’s 'DoesNotExist' exception
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect  # for set_timezone function view [D17.5]
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
+import django_filters
 from mailing.utils import post_limit_exceeded
-from .models import Post, Category
+from rest_framework import viewsets
+
 from .filters import PostFilter
 from .forms import PostForm
-import re
+from .models import Category, Post, Author
+
+from .serializers import PostSerializer, AuthorSerializer, CategorySerializer
 
 
 class PostsListView(ListView):
@@ -161,6 +167,24 @@ class CategoryListView(PostsListView):
         context['is_not_subscriber'] = self.request.user not in self.category.subscribers.all()
         context['category'] = self.category
         return context
+
+
+class PostsViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    # filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    # filterset_fields = ["choose_news", "category"]
+
+
+# AuthorViewSet and CategoryViewSet for PostSerializer.fields[]
+class AuthorViewSet(viewsets.ModelViewSet):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 
 @login_required
