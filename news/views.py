@@ -169,11 +169,16 @@ class CategoryListView(PostsListView):
         return context
 
 
-class PostsViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
+class NewsViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.filter(size='NE')
     serializer_class = PostSerializer
     # filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
     # filterset_fields = ["choose_news", "category"]
+
+
+class ArticlesViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.filter(size='AR')
+    serializer_class = PostSerializer
 
 
 # AuthorViewSet and CategoryViewSet for PostSerializer.fields[]

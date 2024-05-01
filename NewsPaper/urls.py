@@ -18,10 +18,11 @@ from django.urls import include, path
 from django.views.generic import TemplateView
 from rest_framework import routers
 
-from news.views import PostsViewSet, AuthorViewSet, CategoryViewSet
+from news.views import NewsViewSet, ArticlesViewSet, AuthorViewSet, CategoryViewSet
 
 router = routers.DefaultRouter()
-router.register(r'posts', PostsViewSet)
+router.register(r'news', NewsViewSet, basename='news')
+router.register(r'articles', ArticlesViewSet, basename='article')
 router.register(r'authors', AuthorViewSet)
 router.register(r'category', CategoryViewSet)
 
