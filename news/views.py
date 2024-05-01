@@ -11,7 +11,7 @@ from django.shortcuts import redirect  # for set_timezone function view [D17.5]
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 import django_filters
 from mailing.utils import post_limit_exceeded
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 
 from .filters import PostFilter
 from .forms import PostForm
@@ -172,6 +172,7 @@ class CategoryListView(PostsListView):
 class NewsViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.filter(size='NE')
     serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     # filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
     # filterset_fields = ["choose_news", "category"]
 
@@ -179,6 +180,7 @@ class NewsViewSet(viewsets.ModelViewSet):
 class ArticlesViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.filter(size='AR')
     serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 # AuthorViewSet and CategoryViewSet for PostSerializer.fields[]
