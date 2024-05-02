@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import TemplateView
 from rest_framework import routers
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from news.views import NewsViewSet, ArticlesViewSet, AuthorViewSet, CategoryViewSet
 
@@ -40,9 +41,16 @@ urlpatterns = [
     path('sign/', include('sign.urls')),
     # подключаем также ссылки из приложения 'allauth'
     path('accounts/', include('allauth.urls')),
+    # "Самописный" OpenAPI
     path('swagger-ui/', TemplateView.as_view(
         template_name='swagger-ui.html',
         extra_context={'schema_url': 'openapi-schema'}
     ), name='swagger-ui'),
     path('api/', include(router.urls)),  # DRF url's [D18.6]
+
+    # drf-spectacular
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    # Optional UI:
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]

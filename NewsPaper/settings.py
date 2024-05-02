@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     # for D9.5: weekly mailing
     'django_apscheduler',
     'rest_framework',  # [D18.6]
+    'drf_spectacular',
 
     # приложения allauth
     'allauth',
@@ -228,9 +229,18 @@ CELERY_RESULT_SERIALIZER = 'json'
 # CELERY_ENABLE_UTC = False  # because of this
 
 REST_FRAMEWORK = {
-   'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-   'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-   'PAGE_SIZE': 5
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 5,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your Project API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
 }
 
 # for D11.3: Filesystem caching
