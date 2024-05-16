@@ -11,6 +11,8 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
 # для запуска воркера/периодических задач [в разных окнах терминала]:
+# сперва запускаем от имени администратора файл redis-server.exe
+# python manage.py runserver
 # celery -A <project_name> worker -l INFO --pool=solo
 # celery -A <project_name> beat -l INFO
 
